@@ -1,28 +1,46 @@
-# <random-password-generator>
+# Lockbox — private password generator
 
-## Description
+A clean, fast, and accessible password generator that works **entirely in your browser**.
 
-This application should display my Javascript abilities in my own creative and concise way. 
+**Website:** [wiilki.github.io/random-password-generator-refactor](https://wiilki.github.io/random-password-generator-refactor/)
 
-The purpose of this project was to create a password generator using criteria selected by the user. Most of the styling & markup components were already provided. Only a few lines of JS were provide. My goal was to refactor the given code. 
+## Features
 
-The biggest challenge, by far, was figuring out how to iterate loops to produce desired results. It took me a while to figure out how the FOR loops break or continue. But in doing so, I was able to keep the code short, without having to write multiple or longer IF/ELSE statements. 
+- Uses `crypto.getRandomValues()` rather than `Math.random()`. Rejection sampling avoids modulo bias.
+- Select password lengths from 8 to 128 characters, with lowercase, uppercase, numbers, symbols, and an option to exclude commonly confused characters.
+- Guarantees at least one character from **each enabled set** before securely shuffling the result.
+- Includes Balanced, Maximum, and PIN-only presets, plus show/hide, regenerate, and copy actions.
+- Adapts to desktop and mobile with accessible labels, focus states, and live feedback.
+- **No logins, server, analytics, dependency CDN, network calls, or saved passwords.** Passwords exist only in memory until the page is closed. Copying places the password on your system clipboard, which is managed by your device.
 
+## Running locally
 
-## Installation
+Use a simple HTTP server from the repository root (ES modules need a server in most browsers):
 
- * To deploy application, go to [My Github Project](https://wiilki.github.io/random-password-generator-refactor/)
+```sh
+python3 -m http.server 8000
+```
 
-## Usage
+Visit `http://localhost:8000`. Static hosting (including GitHub Pages) requires no build step.
 
- * Click red "Generate Password" button to begin.
- * Enter desired length of password.
- * Click "OK" for character types you would like to include. Click "cancel" for the ones you do NOT want to include.
- * Complete all prompts
+## Tests
 
-![Screenshot](assets/screenshot.png)
+Node.js 20+ is recommended (CI uses 22).
 
+```sh
+npm test
+```
 
-## Credits
+## Security notes
 
-List of special characters provide by [Owasp](https://owasp.org/www-community/password-special-characters)
+- The generator **requires the Web Crypto API**. If unavailable, it displays an error instead of silently falling back to weaker randomness.
+- The on-screen bit count is an **upper bound** from `length × log₂(character pool size)`; guaranteed character-type inclusion changes the distribution, so it must **not** be interpreted as exact entropy or as a promise that a password is uncrackable.
+- The strength label is an indicative estimate based on that upper bound. Real-world security also depends on account protection, phishing resistance, credential reuse, and password handling.
+- Prefer a dedicated password manager, a unique password per account, and multi-factor authentication. The PIN preset is for services that **specifically require digits** and should not be mistaken for a strong general-purpose account password.
+- The browser clipboard may be read by other applications. Clear your clipboard where appropriate and avoid copying passwords on shared devices.
+
+## Tech
+
+HTML, CSS, JavaScript ES modules, browser Web Crypto API, and Node's built-in test runner. No third-party runtime dependencies.
+
+The previous classroom password generator used `prompt()`, `confirm()`, and `Math.random()`. This redesign replaces it with an interactive, security-conscious UI and testable generation logic.
