@@ -1,0 +1,11 @@
+{
+  "name": "lockbox-password-generator",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "Private, accessible, secure browser-based password generator",
+  "scripts": {
+    "test": "node --test"
+  },
+  "engines": { "node": ">=20" }
+}

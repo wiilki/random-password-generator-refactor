@@ -1,36 +1,92 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Password Generator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#091415" />
+    <meta name="description" content="Generate strong, unique passwords in your browser. Secure randomness, flexible options, no accounts or tracking." />
+    <meta name="referrer" content="no-referrer" />
+    <title>Lockbox — Private Password Generator</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="assets/style.css" />
+    <script type="module" src="script.js"></script>
   </head>
   <body>
-    <!-- Changed div to section -->
-    <section class="wrapper">
-      <header>
-        <h1>Password Generator</h1>
+    <div class="page-shell">
+      <header class="site-header container">
+        <a class="brand" href="#top" aria-label="Lockbox home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="5.5" y="10" width="13" height="10" rx="2.5" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 10V7a3.5 3.5 0 017 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="15" r="1.4" fill="currentColor"/></svg>
+          </span>
+          <span>lockbox<span class="brand-period">.</span></span>
+        </a>
+        <div class="header-right"><span class="privacy-pill"><span class="pulse-dot"></span>100% private &amp; local</span><a class="header-link" href="https://github.com/wiilki/random-password-generator-refactor" target="_blank" rel="noopener noreferrer">View source <span aria-hidden="true">↗</span></a></div>
       </header>
-       <!-- Changed div to section -->
-      <section class="card">
-        <div class="card-header">
-          <h2>Generate a Password</h2>
-        </div>
-        <div class="card-body">
-          <textarea
-            readonly
-            id="password"
-            placeholder="Your Secure Password"
-            aria-label="Generated Password"
-          ></textarea>
-        </div>
-        <div class="card-footer">
-          <button id="generate" class="btn">Generate Password</button>
-        </div>
-      </section>
-    </section>
-    <script src="script.js"></script>
+
+      <main id="top" class="container">
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="eyebrow-line"></span> YOUR PERSONAL SECURITY TOOLKIT</div>
+            <h1 id="hero-title">Better passwords.<br /><em>Less effort.</em></h1>
+            <p>Strong security doesn't have to be complicated. Generate a unique, unpredictable password in seconds — right here in your browser.</p>
+          </div>
+          <div class="hero-illustration" aria-hidden="true">
+            <div class="orbit orbit-outer"></div><div class="orbit orbit-mid"></div><div class="orbit orbit-inner"></div>
+            <div class="orbit-center"><svg viewBox="0 0 48 48" fill="none"><path d="M15.5 21v-5a8.5 8.5 0 0117 0v5" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"/><rect x="11" y="21" width="26" height="21" rx="5" stroke="currentColor" stroke-width="2.7"/><path d="M24 29.7v5.5" stroke="currentColor" stroke-width="2.7" stroke-linecap="round"/><circle cx="24" cy="29" r="2" fill="currentColor"/></svg></div>
+            <span class="orbit-star star-one">✳</span><span class="orbit-star star-two">✦</span>
+          </div>
+        </section>
+
+        <section class="workspace" aria-label="Password generator">
+          <div class="panel result-panel">
+            <div class="panel-heading"><div><span class="section-index">01 / OUTPUT</span><h2>Your new password</h2></div><span class="live-badge"><span></span> GENERATED LOCALLY</span></div>
+            <label class="field-label" for="password">GENERATED PASSWORD</label>
+            <div class="password-field">
+              <input id="password" type="text" readonly autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Generated password" />
+              <button id="toggle-visibility" class="icon-button" type="button" aria-label="Hide password" aria-pressed="true" title="Hide password">
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M2.5 12s3.4-6 9.5-6 9.5 6 9.5 6-3.4 6-9.5 6S2.5 12 2.5 12Z" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="2.8" stroke="currentColor" stroke-width="1.6"/></svg>
+              </button>
+            </div>
+            <p class="field-hint" id="generation-note">Generated on this device. Never sent or saved anywhere.</p>
+
+            <div class="strength-section" aria-label="Estimated password strength">
+              <div class="strength-heading"><span>STRENGTH ESTIMATE</span><strong id="strength-label">—</strong></div>
+              <div class="strength-meter" id="strength-meter" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+              <div class="strength-stats"><div><span class="stat-title">ESTIMATED UPPER BOUND</span><div><strong id="entropy">—</strong><span class="stat-unit">bits</span></div></div><div><span class="stat-title">CHARACTER POOL</span><div><strong id="pool-count">—</strong><span class="stat-unit">characters</span></div></div></div>
+              <p class="metric-disclaimer">Estimates describe the selected character space, not guaranteed real-world security.</p>
+            </div>
+
+            <div class="action-group">
+              <button id="generate" class="button button-primary" type="button"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M20 7v5h-5M4 17v-5h5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.2 9A7 7 0 0118 7.2L20 12M4 12l2 4.8A7 7 0 0018 15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg> Generate password</button>
+              <button id="copy" class="button button-secondary" type="button" disabled><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="8" width="11" height="12" rx="2" stroke="currentColor" stroke-width="1.8"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v9a2 2 0 002 2h2" stroke="currentColor" stroke-width="1.8"/></svg><span id="copy-label">Copy password</span></button>
+            </div>
+            <p class="status-message" id="status" role="status" aria-live="polite">Adjust the options to make it yours.</p>
+          </div>
+
+          <div class="panel controls-panel">
+            <div class="panel-heading"><div><span class="section-index">02 / CUSTOMIZE</span><h2>Make it yours</h2></div><span class="settings-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="9" cy="7" r="2.7" fill="#142321" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="17" r="2.7" fill="#142321" stroke="currentColor" stroke-width="1.8"/></svg></span></div>
+
+            <div class="settings-block">
+              <div class="setting-heading"><label for="length">Password length</label><div class="number-wrap"><input id="length" type="number" min="8" max="128" step="1" value="18" inputmode="numeric" aria-describedby="length-hint" /><span>chars</span></div></div>
+              <input class="length-slider" type="range" id="length-slider" min="8" max="128" step="1" value="18" aria-label="Password length" />
+              <div class="range-labels" id="length-hint"><span>8 characters</span><span>128 characters</span></div>
+            </div>
+
+            <div class="settings-block preset-block"><h3>QUICK PRESETS</h3><div class="preset-list" role="group" aria-label="Password presets"><button type="button" class="preset is-active" data-preset="balanced" aria-pressed="true">Balanced</button><button type="button" class="preset" data-preset="maximum" aria-pressed="false">Maximum</button><button type="button" class="preset" data-preset="pin" aria-pressed="false">PIN only</button></div></div>
+
+            <fieldset class="settings-block type-block"><legend>CHARACTER TYPES</legend>
+              <label class="check-row" for="lowercase"><span class="check-copy"><strong>Lowercase letters</strong><small>abcdefghijklmnopqrstuvwxyz</small></span><input type="checkbox" id="lowercase" checked /><span class="checkbox-ui" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4.5 10 3.5 3.5L15.5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+              <label class="check-row" for="uppercase"><span class="check-copy"><strong>Uppercase letters</strong><small>ABCDEFGHIJKLMNOPQRSTUVWXYZ</small></span><input type="checkbox" id="uppercase" checked /><span class="checkbox-ui" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4.5 10 3.5 3.5L15.5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+              <label class="check-row" for="numbers"><span class="check-copy"><strong>Numbers</strong><small>0123456789</small></span><input type="checkbox" id="numbers" checked /><span class="checkbox-ui" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4.5 10 3.5 3.5L15.5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+              <label class="check-row" for="symbols"><span class="check-copy"><strong>Special characters</strong><small>!@#$%^&amp;* and more</small></span><input type="checkbox" id="symbols" checked /><span class="checkbox-ui" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><path d="m4.5 10 3.5 3.5L15.5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></label>
+            </fieldset>
+            <label class="advanced-option" for="exclude-ambiguous"><span><strong>Avoid similar-looking characters</strong><small>Exclude O, 0, I, l, 1 and similar characters</small></span><input type="checkbox" id="exclude-ambiguous" checked /><span class="switch-ui" aria-hidden="true"></span></label>
+          </div>
+        </section>
+
+        <section class="assurance" aria-label="Privacy and security information"><div class="assurance-item"><span class="assurance-icon" aria-hidden="true">⌁</span><div><strong>Stays on your device</strong><p>No accounts, tracking, or password uploads. This tool works entirely in your browser.</p></div></div><div class="assurance-item"><span class="assurance-icon" aria-hidden="true">✳</span><div><strong>Secure by design</strong><p>Uses Web Crypto with unbiased selection and includes every character type you choose.</p></div></div><div class="assurance-item"><span class="assurance-icon" aria-hidden="true">↗</span><div><strong>Open and transparent</strong><p>Built with plain JavaScript. Explore the source, audit the logic, or run it yourself.</p></div></div></section>
+      </main>
+      <footer class="site-footer container"><span>lockbox<span class="brand-period">.</span> &nbsp; Made for better digital habits.</span><span>Unique password for every account. Always.</span></footer>
+    </div>
   </body>
 </html>
